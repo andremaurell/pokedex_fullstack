@@ -3,11 +3,13 @@ import { Pool } from 'pg';
 import { router } from './src/routes';
 import { createTeamsTable } from './src/utils';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(router);
 const PG_URL = "postgres://default:17LolrYQGieb@ep-restless-hat-a43p2mw7.us-east-1.aws.neon.tech:5432/verceldb"
