@@ -8,6 +8,9 @@ export default {
     extend: {
       colors: {
         primary: '#f6ff46',
+      },
+      boxShadow: {
+        'input': '0 5px 5px -1px rgba(0, 0, 0, 0.3)',
       }
     },
   },
