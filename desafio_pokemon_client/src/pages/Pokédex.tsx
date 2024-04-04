@@ -55,7 +55,7 @@ const Pokédex = () => {
     <div>
       <Header />
       <div className='flex flex-col justify-start px-20 gap-5'>
-      <h1 className='flex items-center align-middle justify-center'>X Pokemons for you to choose your favorite</h1>
+      <h1 className='flex items-center align-middle justify-center'>{`${pokemonData.length} Pokemons for you to choose your favorite`}</h1>
       <input className='w-[90vw] rounded-[30px] p-3 bg-[#F2F2F2] shadow-input outline-none px-10' type="search" 
       placeholder='Search your favorite Pokemon'
       onChange={handleFilter}
