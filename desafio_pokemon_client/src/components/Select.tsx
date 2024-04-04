@@ -9,25 +9,25 @@ import MuiSelect, { SelectChangeEvent } from '@mui/material/Select';
 
 
 const types = [
-    'Fire',
-    'Water',
-    'Ground',
-    'Flying',
-    'Electric',
-    'Normal',
-    'Fighting',
-    'Psychic',
-    'Rock',
-    'Ice',
-    'Bug',
-    'Ghost',
-    'Dragon',
-    'Dark',
-    'Steel',
-    'Fairy',
+    'fire',
+    'water',
+    'ground',
+    'flying',
+    'electric',
+    'normal',
+    'fighting',
+    'psychic',
+    'rock',
+    'ice',
+    'bug',
+    'ghost',
+    'dragon',
+    'dark',
+    'steel',
+    'fairy',
   ];
 
-const PokemonSelect = () => {
+const PokemonSelect = ({ onTypeChange }) => {
     const [pokemonType, setpokemonType] = useState<string[]>([]);
 
     const handleChange = (event: SelectChangeEvent<typeof pokemonType>) => {
@@ -37,6 +37,7 @@ const PokemonSelect = () => {
       setpokemonType(
         typeof value === 'string' ? value.split(',') : value,
       );
+      onTypeChange(value);
     };
   return (
     <FormControl className='w-[10vw] h-[6vh]'>
