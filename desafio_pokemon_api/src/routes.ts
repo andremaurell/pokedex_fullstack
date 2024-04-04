@@ -5,28 +5,9 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 
 const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const POKEAPI_URL_TYPE = 'https://pokeapi.co/api/v2/type/';
 
 const router = express.Router();
 dotenv.config();
-
-router.get('/api/pokemons', async (req: Request, res: Response) => {
-    try { 
-        const response = await axios.get(`${POKEAPI_URL}?limit=151`);
-        const pokemonData = response.data.results.map((pokemon: any) => {
-            const id = pokemon.url.split('/').slice(-2, -1)[0];
-            return {
-                name: pokemon.name,
-                image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
-            };
-        });
-        res.json(pokemonData);
-    } catch (error) {
-        console.error('Error fetching Pokemon data:', error);
-        res.status(500).json({ message: 'Error fetching Pokemon data' });
-    }
-});
-
 
 router.get('/api/teams', async (req: Request, res: Response) => {
     try {
@@ -89,33 +70,4 @@ router.post('/api/teams', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/api/types/:type', async (req, res) => {
-    const type = req.params.type;
-
-    try {
-        const response = await axios.get(`${POKEAPI_URL_TYPE}${type}`);
-        const pokemons = response.data.pokemon.map((pokemon: { pokemon: { name: string; }; }) => pokemon.pokemon.name);
-        
-        res.json({
-            type: type,
-            pokemons: pokemons
-        });
-    } catch (error) {
-        res.status(404).json({ error: `Pokémon type ${type} not found.` });
-    }
-}); 
-
-router.get('/api/pokemons/:name', async (req, res) => {
-    const name = req.params.name;
-    try {
-        const response = await axios.get(`${POKEAPI_URL}${name}`, );
-        const { id, height, weight, types } = response.data;
-        res.json({ name, id, height, weight, types: types.map((type: { type: { name: string; }; }) => type.type.name)})
-    } catch (error) {
-        res.status(404).json({ error: `Pokémon ${name} not found.` });
-    }
-});
-
-
 export { router };
-
