@@ -140,12 +140,14 @@ router.get('/api/legendaries', async (req: Request, res: Response) => {
         const response = await axios.get(`${POKEAPI_URL_LEGENDARY}?limit=151`);
         const legendaryPromises = response.data.results.map(async (pokemon: any) => {
             const legendary = await getPokemonLegendary(pokemon.name);
+            const id = pokemon.url.split('/').slice(-2, -1)[0];
             if (legendary.is_legendary || legendary.is_mythical) {
                 const stats = await getPokemonStats(pokemon.name);
                 const legendaryData = {
                     name: pokemon.name,
                     legendary: legendary,
-                    stats: stats
+                    stats: stats, 
+                    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
                 };
                 return legendaryData;
             }
