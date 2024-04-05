@@ -3,9 +3,10 @@ import express, { Request, Response } from 'express';
 import { PokemonDetails } from './types';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { get } from 'http';
 
 const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const POKEAPI_URL_TYPE = 'https://pokeapi.co/api/v2/type/';
+const POKEAPI_URL_LEGENDARY = 'https://pokeapi.co/api/v2/pokemon-species/';
 
 const router = express.Router();
 dotenv.config();
@@ -59,7 +60,6 @@ router.get('/api/teams', async (req: Request, res: Response) => {
         res.status(500).json({ error: (error as Error).message });
     }
 });
-// Busca um time registrado por usuário
 router.get('/api/teams/:owner', async (req: Request, res: Response) => {
     const owner = req.params.owner;
     try {
@@ -73,7 +73,6 @@ router.get('/api/teams/:owner', async (req: Request, res: Response) => {
         res.status(500).json({ error: (error as Error).message });
     }
 });
-// Rota para criação de um time
 router.post('/api/teams', async (req: Request, res: Response) => {
     const { user, team } = req.body;
     if (!user || !team || !Array.isArray(team)) {
@@ -105,5 +104,60 @@ router.post('/api/teams', async (req: Request, res: Response) => {
         client.release();
     }
 });
+interface legendaries {
+    is_legendary: boolean;
+    is_mythical: boolean;
+}
+
+interface stats {
+    name: string;
+    base_stat: number;
+}
+
+const getPokemonLegendary = async (pokemonName: string) => {
+    try {
+        const response = await axios.get(`${POKEAPI_URL_LEGENDARY}${pokemonName}`);
+        const { is_legendary, is_mythical }: legendaries = response.data;
+        return { is_legendary, is_mythical };
+    } catch (error) {
+        throw new Error(`Pokémon ${pokemonName} not found.`);
+    }
+};
+const getPokemonStats = async (pokemonName: string) => {
+    try {
+        const response = await axios.get(`${POKEAPI_URL}${pokemonName}`);
+        return response.data.stats.map((stat: { base_stat: number; stat: { name: string; }; }) => {
+            return { name: stat.stat.name, base_stat: stat.base_stat };
+        });
+
+    } catch (error) {
+        throw new Error(`Pokémon ${pokemonName} not found stats.`);
+    }
+};
+
+router.get('/api/legendaries', async (req: Request, res: Response) => {
+    try {
+        const response = await axios.get(`${POKEAPI_URL_LEGENDARY}?limit=151`);
+        const legendaryPromises = response.data.results.map(async (pokemon: any) => {
+            const legendary = await getPokemonLegendary(pokemon.name);
+            if (legendary.is_legendary || legendary.is_mythical) {
+                const stats = await getPokemonStats(pokemon.name);
+                const legendaryData = {
+                    name: pokemon.name,
+                    legendary: legendary,
+                    stats: stats
+                };
+                return legendaryData;
+            }
+            return null;
+        });
+        const resolvedData = (await Promise.all(legendaryPromises)).filter(data => data !== null);
+        res.json(resolvedData);
+    } catch (error) {
+        console.error('Error fetching Pokemon data:', error);
+        res.status(500).json({ message: 'Error fetching Pokemon data' });
+    }
+});
+
 
 export { router };
