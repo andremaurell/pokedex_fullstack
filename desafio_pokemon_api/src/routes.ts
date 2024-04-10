@@ -4,6 +4,7 @@ import { PokemonDetails } from './types';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { get } from 'http';
+import { types } from 'util';
 
 const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const POKEAPI_URL_LEGENDARY = 'https://pokeapi.co/api/v2/pokemon-species/';
@@ -142,12 +143,14 @@ router.get('/api/legendaries', async (req: Request, res: Response) => {
             const legendary = await getPokemonLegendary(pokemon.name);
             const id = pokemon.url.split('/').slice(-2, -1)[0];
             if (legendary.is_legendary || legendary.is_mythical) {
+                const types = await axios.get(`${POKEAPI_URL}${id}`);
                 const stats = await getPokemonStats(pokemon.name);
                 const legendaryData = {
                     name: pokemon.name,
                     legendary: legendary,
                     stats: stats, 
-                    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+                    image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+                    types: types.data.types.map((type: { type: { name: string; }; }) => type.type.name)
                 };
                 return legendaryData;
             }
