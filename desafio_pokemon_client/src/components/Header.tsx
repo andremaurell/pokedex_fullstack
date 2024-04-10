@@ -1,11 +1,17 @@
-import React from 'react'
+import { useState } from 'react'
 import Logo from '../assets/logo.svg'
+import { Link } from 'react-router-dom';
 
-const Header = () => {
-    const [isSelected, setIsSelected] = React.useState('Home')
+interface HeaderProps {
+    whoPage: string
+}
 
-    const handleSelect = (value:string) => {
-        setIsSelected(value)
+const Header = ({ whoPage }: HeaderProps) => {
+    const [isSelected, setIsSelected] = useState('Home')
+
+    const handleSelect = async (value:string) => {
+       await setIsSelected(value)
+       whoPage = value
     }
 
 
@@ -15,10 +21,18 @@ const Header = () => {
         <img src={Logo} alt="Logo" className='w-28'/>
 
         <div className='flex gap-20 text-lg' >
-            <a href="#" onClick={() => handleSelect('Home')} className={isSelected === 'Home' ? 'selected-navbar' : ''}>Home</a>
-            <a href="#" onClick={() => handleSelect('Pokédex')} className={isSelected === 'Pokédex' ? 'selected-navbar' : ''}>Pokédex</a>
-            <a href="#" onClick={() => handleSelect('Legendaries')} className={isSelected === 'Legendaries' ? 'selected-navbar' : ''}>Legendaries</a>
-            <a href="#" onClick={() => handleSelect('Documentation')} className={isSelected === 'Documentation' ? 'selected-navbar' : ''}>Documentation</a>
+          <Link to='/Home'>
+            <a onClick={() => handleSelect('Home')} className={whoPage === 'Home' ? 'selected-navbar' : ''}>Home</a>
+          </Link>
+          <Link to='/Pokedex'>
+            <a onClick={() => handleSelect('Pokédex')} className={whoPage === 'Pokédex' ? 'selected-navbar' : ''}>Pokédex</a>
+          </Link>
+          <Link to='/Legendaries'>
+            <a onClick={() => handleSelect('Legendaries')} className={whoPage === 'Legendaries' ? 'selected-navbar' : ''}>Legendaries</a>
+          </Link>
+          <Link to='/Documentation'>
+            <a onClick={() => handleSelect('Documentation')} className={whoPage === 'Documentation' ? 'selected-navbar' : ''}>Documentation</a>
+          </Link>
         </div>
     </div>
     </div>

@@ -8,6 +8,10 @@ interface Pokemon {
   types: string[];
   name: string;
   image: string;
+  stats: {
+    name: string;
+    base_stat: number;
+  }[];
   sprites: {
     front_default: string;
   };
@@ -53,7 +57,7 @@ const Pokédex = () => {
   }, []);
   return (
     <div>
-      <Header />
+      <Header whoPage='Pokédex' />
       <div className='flex flex-col justify-start px-20 gap-5'>
       <h1 className='flex items-center align-middle justify-center'>{`${pokemonData.length} Pokemons for you to choose your favorite`}</h1>
       <input className='w-[90vw] rounded-[30px] p-3 bg-[#F2F2F2] shadow-input outline-none px-10' type="search" 
@@ -63,7 +67,7 @@ const Pokédex = () => {
       <Select onTypeChange={handleTypeChange}/>
       <div className='grid grid-cols-3 gap-10 justify-center pt-5'>
       {filtered.map((pokemon, index) => (
-          <Card_pokemon key={index} name={pokemon.name} image={pokemon.image} types={pokemon.types} />
+          <Card_pokemon key={index} name={pokemon.name} image={pokemon.image} types={pokemon.types} stats={pokemon.stats} />
         ))}
       </div>
       </div>

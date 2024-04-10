@@ -1,12 +1,13 @@
 import React from 'react';
 
-interface Pokemon {
+export interface Pokemon {
   image: string;
   name: string;
   types: string[];
+  stats: string[];
 }
 
-const typesColors: { [key: string]: string } = {
+export const typesColors: { [key: string]: string } = {
   grass: 'bg-grass',
   fire: 'bg-fire',
   water: 'bg-water',

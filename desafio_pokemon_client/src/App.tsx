@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 function App() {
 
   return (
+    <div className="max-h-screen h-screen max-w-screen-2xl">
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -22,6 +23,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </div>
   )
 }
 
