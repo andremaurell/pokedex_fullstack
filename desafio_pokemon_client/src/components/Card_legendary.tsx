@@ -18,7 +18,7 @@ const Card_legendary: React.FC<Pokemon> = ({ name, image, stats, types }) => {
             foundType = true;
             return (
               <div key={type} className={`w-full h-[28vh] flex items-center justify-center ${typesColors[type]} rounded-lg`}>
-                <img className='max-h-56' src={image} alt={name} />
+                <img className='max-h-56 h-52' src={image} alt={name} />
               </div>
             );
           }
