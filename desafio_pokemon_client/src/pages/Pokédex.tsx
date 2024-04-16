@@ -8,10 +8,7 @@ interface Pokemon {
   types: string[];
   name: string;
   image: string;
-  stats: {
-    name: string;
-    base_stat: number;
-  }[];
+  stats: string[];
   sprites: {
     front_default: string;
   };

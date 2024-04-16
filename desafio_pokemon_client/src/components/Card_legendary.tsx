@@ -9,6 +9,7 @@ interface Stat {
 
 const Card_legendary: React.FC<Pokemon> = ({ name, image, stats, types }) => {
   let foundType = false;
+  console.log('stats', stats)
   
   return (
     <div className='bg-white h-[27rem] w-80 max-h-[28rem] rounded-lg'>

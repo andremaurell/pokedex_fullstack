@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Pokemon_modal from './Pokemon_modal';
 
 export interface Pokemon {
   image: string;
@@ -28,12 +29,25 @@ export const typesColors: { [key: string]: string } = {
   poison: 'bg-poison',
 };
 
-const CardPokemon: React.FC<Pokemon> = ({ name, image, types }) => {
+
+const CardPokemon: React.FC<Pokemon> = ({ name, image, types, stats }) => {
+  const [showModal, setShowModal] = useState(false)
+
+  console.log('stats',stats)
+
   let foundType = false;
-  console.log(image)
+
+  const openModal = () => {
+      setShowModal(prev => !prev)
+  }
   return (
     <div className='max-w-[21vw] h-[20vh] bg-[#F2F2F2]'>
-      <a href="#" className='flex justify-between items-center'>
+      <div onClick={openModal} className='flex justify-between items-center'>
+        {showModal && (
+          <div className='flex items-center justify-center relative'>
+          <Pokemon_modal name={name} image={image} types={types} stats={stats} />
+          </div>
+        )}
         <div className='flex flex-col px-6 gap-6 justify-between items-start max-w-[10vw]'>
           <h2>{name.charAt(0).toUpperCase() + name.slice(1)}</h2>
           <div className='flex flex-col gap-[0.4rem]'>
@@ -53,7 +67,7 @@ const CardPokemon: React.FC<Pokemon> = ({ name, image, types }) => {
           }
           return null;
         })}
-      </a>
+      </div>
     </div>
   );
 };
