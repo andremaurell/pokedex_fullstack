@@ -22,8 +22,12 @@ interface PokemonData {
 const getPokemonDetails = async (name: string) => {
     try {
         const response = await axios.get(`${POKEAPI_URL}${name}`);
-        const { id, height, weight, types } = response.data;
-        return { name, id, height, weight, types: types.map((type: { type: { name: string; }; }) => type.type.name) };
+        const { id, height, weight, types, stats } = response.data;
+        return { name, id, height, weight, 
+            types: types.map((type: { type: { name: string; }; }) => type.type.name), 
+            stats: stats.map((stat: { base_stat: number; stat: { name: string; }; }) => {
+            return { name: stat.stat.name, base_stat: stat.base_stat };
+        }) };
     } catch (error) {
         throw new Error(`Pokémon ${name} not found.`);
     }
@@ -37,8 +41,10 @@ router.get('/api/pokemons', async (req: Request, res: Response) => {
         const pokemonPromises = response.data.results.map(async (pokemon: any) => {
             const id = pokemon.url.split('/').slice(-2, -1)[0];
             const infos = await getPokemonDetails(pokemon.name);
+            console.log(infos.stats)
             return {
                 name: pokemon.name,
+                stats: infos.stats,
                 types: infos.types,
                 image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
             };
